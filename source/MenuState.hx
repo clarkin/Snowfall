@@ -3,13 +3,7 @@ package;
 import openfl.Assets;
 import flash.geom.Rectangle;
 import flash.net.SharedObject;
-import org.flixel.FlxButton;
-import org.flixel.FlxG;
-import org.flixel.FlxPath;
-import org.flixel.FlxSave;
-import org.flixel.FlxSprite;
-import org.flixel.FlxState;
-import org.flixel.FlxText;
+import org.flixel.*;
 import org.flixel.util.FlxMath;
 
 class MenuState extends FlxState
@@ -26,7 +20,11 @@ class MenuState extends FlxState
 		FlxG.mouse.show();
 		#end
 		
-		add(new FlxText(0, 0, 100, "Hello World!"));
+		var title = new FlxText(0, 200, 480, "Snowfall");
+		title.setFormat(null, 24, 0xC4EEFC, "center");
+		add(title);
+		
+		FlxG.switchState(new PlayState());
 		
 		super.create();
 	}
@@ -45,6 +43,10 @@ class MenuState extends FlxState
 	 */
 	override public function update():Void
 	{
+		if (FlxG.mouse.justReleased()) {
+			FlxG.switchState(new PlayState());
+		}
+		
 		super.update();
 	}	
 }
