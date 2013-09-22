@@ -15,28 +15,19 @@ class PlayState extends FlxState
 	{
 		FlxG.mouse.show();
 		
-		_emitter = new FlxEmitter(FlxG.width, 0, 2000);
-		_emitter.setSize(10, FlxG.height);
+		_emitter = new FlxEmitter(-50, -20, 2000);
+		_emitter.setSize(FlxG.width + 200, 10);
 		_emitter.setXSpeed(-10, -20);
-		_emitter.setYSpeed( -5, 5);
-		_emitter.setRotation( -400, 400);
+		_emitter.setYSpeed( -15, 5);
+		_emitter.setScale(0.5, 1.5, 0.5, 1.5);
+		_emitter.setAlpha(0.5, 1, 0.5, 1);
 		_emitter.bounce = 0.1;
-		_emitter.makeParticles("assets/images/snow_sprites.png", 2000, 32, true, 0.8); 
+		_emitter.gravity = 1;
+		_emitter.makeParticles("assets/images/snow_sprites.png", 2000, 32, true, 0); 
 		
 		add(_emitter);
-		
-		/*
-		for (i in 0...(Std.int(_emitter.maxSize))) 
-		{
-			_snowflake = new FlxParticle();
-			_snowflake.loadRotatedGraphic("assets/images/snow_sprites.png", 16, 0); 
-			_snowflake.angularVelocity = FlxRandom.float() * 5 - 15; 
-			_snowflake.visible = false; 
-			_emitter.add(_snowflake);
-		}
-		*/
 
-		_emitter.start(false, 50, .1);
+		_emitter.start(false, 90, .01, 0, 90);
 	}
 	
 	override public function update():Void
