@@ -26,6 +26,7 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		FlxG.mouse.show();
+		FlxG.bgColor = 0xff026DA9;
 		
 		
 		_layer_background = new FlxGroup();
@@ -73,7 +74,7 @@ class PlayState extends FlxState
 		super.update();
 		
 		//FlxG.collide(_layer_midground, _layer_midground);
-		FlxG.collide(_player, _tileMap);
+		FlxG.overlap(_player, _tileMap, playerTileCollision);
 		
 		if (FlxG.keys.justPressed("D"))
 		{
@@ -86,5 +87,8 @@ class PlayState extends FlxState
 		}
 	}
 	
+	public function playerTileCollision(player:Player, tile:FlxTilemap):Void {
+		player.tileCollision();
+	}
 
 }
