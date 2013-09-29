@@ -27,47 +27,44 @@ class PlayState extends FlxState
 	{
 		FlxG.mouse.show();
 		
-		_background_emitter = new SnowflakeEmitter(-50, -20, 2000, SCROLLFACTOR_BACKGROUND);
 		
 		_layer_background = new FlxGroup();
+				
+		_background_emitter = new SnowflakeEmitter(-50, -100, 2000, SCROLLFACTOR_BACKGROUND);
 		_layer_background.add(_background_emitter);
 		
-		_midground_emitter = new SnowflakeEmitter(-50, -20, 2000, SCROLLFACTOR_MIDGROUND);
-		//_midground_emitter.setXSpeed(-10, -20);
-		//_midground_emitter.setYSpeed( -15, 5);
-		//_midground_emitter.setScale(0.5, 1.5, 0.5, 1.5);
-		//_midground_emitter.setAlpha(0.5, 1, 0.5, 1);
 		
 		_layer_midground = new FlxGroup();
-		_layer_midground.add(_midground_emitter);
 		
 		_tileMap = new FlxTilemap();
-		_tileMap.loadMap(Assets.getText("assets/images/tilemap.txt"), "assets/images/tiles.png", 16, 16, FlxTilemap.AUTO);
+		_tileMap.loadMap(Assets.getText("assets/images/tilemap.txt"), "assets/images/bugtilesblue.png", 16, 16);
 		_layer_midground.add(_tileMap);
 		
-		_player = new Player(FlxG.width / 2, FlxG.height / 2);
+		_player = new Player(380, 350);
 		_player.scrollFactor = SCROLLFACTOR_MIDGROUND;
-		FlxG.camera.follow(_player, FlxCamera.STYLE_LOCKON); 
+		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER); 
 		_layer_midground.add(_player);
 		
-		_foreground_emitter = new SnowflakeEmitter(-50, -20, 2000, SCROLLFACTOR_FOREGROUND);
-		//_foreground_emitter.setXSpeed(10, 20);
-		//_foreground_emitter.setYSpeed( -15, 5);
-		//_foreground_emitter.setScale(1.5, 2.0, 2.5, 3.0);
-		//_foreground_emitter.setAlpha(0.2, 0.3, 0.4, 0.5);
+		_midground_emitter = new SnowflakeEmitter( -50, -100, 2000, SCROLLFACTOR_MIDGROUND);
+		_layer_midground.add(_midground_emitter);
+		
 		
 		_layer_foreground = new FlxGroup();
+		
+		_foreground_emitter = new SnowflakeEmitter(-50, -100, 2000, SCROLLFACTOR_FOREGROUND);
+		
 		_layer_foreground.add(_foreground_emitter);
+		
 		
 		add(_layer_background);
 		add(_layer_midground);
 		add(_layer_foreground);
 		
-		_foreground_emitter.start(false, 60, .20, 0, 90);
+		_foreground_emitter.start(false, 60, .30, 0, 90);
 		_foreground_emitter.setTimer(10);
-		_midground_emitter.start(false, 180, .05, 0, 90);
+		_midground_emitter.start(false, 180, .15, 0, 90);
 		_midground_emitter.setTimer(20);
-		_background_emitter.start(false, 60, .10, 0, 90);
+		_background_emitter.start(false, 60, .05, 0, 90);
 		_background_emitter.setTimer(30);
 	}
 	
@@ -75,7 +72,18 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
-		FlxG.collide(_layer_midground, _layer_midground);
+		//FlxG.collide(_layer_midground, _layer_midground);
+		FlxG.collide(_player, _tileMap);
+		
+		if (FlxG.keys.justPressed("D"))
+		{
+			FlxG.visualDebug = !FlxG.visualDebug;
+		}
+		
+		if (FlxG.keys.justPressed("R"))
+		{
+			FlxG.switchState(new MenuState());
+		}
 	}
 	
 

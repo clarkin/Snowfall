@@ -4,14 +4,20 @@ import org.flixel.util.*;
 
 class Player extends FlxSprite
 {
-	private static var RUNSPEED:Float = 100;
+	private static var RUN_SPEED:Float = 100;
+	private static var JUMP_SPEED:Float = 200;
+	private static var GRAVITY:Float = 400;
+	
+	private var _jump:Float;
 	
 	public function new(X:Float = 0, Y:Float = 0, SimpleGraphic:Dynamic = null)
 	{
 		super(X, Y, SimpleGraphic);
 		
-		maxVelocity = new FlxPoint(RUNSPEED, RUNSPEED);
-        drag = new FlxPoint(RUNSPEED * 4, RUNSPEED * 4); // decelerate to a stop within 1/4 of a second
+		maxVelocity.x = RUN_SPEED;
+        maxVelocity.y = JUMP_SPEED;
+        drag.x = RUN_SPEED * 8;
+		acceleration.y = GRAVITY;
 	}
 	
 	override public function update():Void
@@ -23,46 +29,41 @@ class Player extends FlxSprite
 	
 	public function checkMovement():Void
 	{
-		acceleration.x = acceleration.y = 0; // no gravity or drag by default
-		var movement:FlxPoint = new FlxPoint();
-		if (FlxG.keys.pressed("LEFT"))
-			movement.x -= 1;
-		if (FlxG.keys.pressed("RIGHT"))
-			movement.x += 1;
-		if (FlxG.keys.pressed("UP"))
-			movement.y -= 1;
-		if (FlxG.keys.pressed("DOWN"))
-			movement.y += 1;
-			
-		// check final movement direction
-		if (movement.x < 0)
+		acceleration.x = 0;
+		if (FlxG.keys.LEFT)
 			moveLeft();
-		else if (movement.x > 0)
+		else if (FlxG.keys.RIGHT)
 			moveRight();
-		if (movement.y < 0)
-			moveUp();
-		else if (movement.y > 0)
-			moveDown();
+
+		checkJump();
 	}
 	
 	public function moveLeft():Void {
 		facing = FlxObject.LEFT;
-		acceleration.x = -RUNSPEED * 4; // accelerate to top speed in 1/4 of a second
+		acceleration.x = -drag.x;
 	}
 	 
 	public function moveRight():Void {
 		facing = FlxObject.RIGHT;
-		acceleration.x = RUNSPEED * 4; // accelerate to top speed in 1/4 of a second
+		acceleration.x = drag.x;
 	}
 
-	public function moveUp():Void {
-		facing = FlxObject.UP;
-		acceleration.y = -RUNSPEED * 4; // accelerate to top speed in 1/4 of a second
-	}
+	public function checkJump():Void {
+		if((_jump >= 0) && (FlxG.keys.UP)) //You can also use space or any other key you want
+		{
+			_jump += FlxG.elapsed;
+			if(_jump > 0.25) _jump = -1; //You can't jump for more than 0.25 seconds
+		}
+		else _jump = -1;
 
-	public function moveDown():Void {
-		facing = FlxObject.DOWN;
-		acceleration.y = RUNSPEED * 4; // accelerate to top speed in 1/4 of a second
+		if (_jump > 0)
+		{
+			if(_jump < 0.035)   // this number is how long before a short slow jump shifts to a faster, high jump
+				velocity.y = -.6 * maxVelocity.y; //This is the minimum height of the jump
+				
+			else 
+				velocity.y = -.8 * maxVelocity.y;
+		}
 	}
 	
 }

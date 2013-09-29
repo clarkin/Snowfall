@@ -3,14 +3,14 @@ package ;
 import org.flixel.FlxParticle;
 import org.flixel.util.FlxPoint;
 
-class Snowflake extends FlxParticle
+class SnowflakeForeground extends FlxParticle
 {
 
 	public function new() 
 	{
 		super();
 		
-		scrollFactor = PlayState.SCROLLFACTOR_MIDGROUND;
+		scrollFactor = PlayState.SCROLLFACTOR_FOREGROUND;
 	}
 
 }
