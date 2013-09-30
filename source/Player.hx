@@ -5,8 +5,8 @@ import org.flixel.util.*;
 class Player extends FlxSprite
 {
 	private static var RUN_SPEED:Float = 800;
-	private static var JUMP_SPEED:Float = 800;
-	private static var GRAVITY:Float = 40;
+	private static var JUMP_SPEED:Float = 200;
+	private static var GRAVITY:Float = 200;
 	
 	private var _jump:Float = -1;
 	private var controllable:Bool = false;
@@ -17,7 +17,7 @@ class Player extends FlxSprite
 		
 		maxVelocity.x = RUN_SPEED;
         maxVelocity.y = JUMP_SPEED;
-        drag.x = RUN_SPEED / 8;
+        drag.x = RUN_SPEED / 2;
 		drag.y = 0;
 		acceleration.y = GRAVITY;
 		
@@ -26,12 +26,10 @@ class Player extends FlxSprite
 		addAnimation("walking", [0,1,2,3], 4, true);
 		addAnimation("jumping", [6, 7, 8, 9], 4, false);
 		
-		/*
 		width -= 10;
 		height -= 8;
 		offset.x = 5;
 		offset.y = 8;
-		*/
 		
 		play("idle");
 	}
@@ -41,7 +39,7 @@ class Player extends FlxSprite
 		super.update();
 		
 		checkMovement();
-		trace(velocity.y);
+		//trace(velocity.y);
 	}
 	
 	public function checkMovement():Void
@@ -73,7 +71,7 @@ class Player extends FlxSprite
 
 	public function checkJump():Void {
 		if (FlxG.keys.justPressed("UP"))  {
-			trace("jump");
+			//trace("jump");
 			controllable = false;
 			velocity.y = -JUMP_SPEED;
 			play("jumping", true);
@@ -97,9 +95,12 @@ class Player extends FlxSprite
 	}
 	
 	public function tileCollision():Void {
-		trace("collide");
-		controllable = true;
-		
+		if (!controllable) {
+			//trace("collide");
+			controllable = true;
+			velocity.x = velocity.y = 0;
+			play("idle");
+		}
 	}
 	
 }

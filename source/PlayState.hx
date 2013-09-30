@@ -2,6 +2,7 @@ package;
 
 import flash.ui.Mouse;
 import org.flixel.*;
+import org.flixel.system.*;
 import org.flixel.util.*;
 import openfl.Assets;
 
@@ -38,12 +39,12 @@ class PlayState extends FlxState
 		_layer_midground = new FlxGroup();
 		
 		_tileMap = new FlxTilemap();
-		_tileMap.loadMap(Assets.getText("assets/images/tilemap.txt"), "assets/images/bugtilesblue.png", 16, 16);
+		_tileMap.loadMap(Assets.getText("assets/images/tilemap.txt"), "assets/images/bugtilesblue.png", 16, 16, 0, 0, 1, 1);
 		_layer_midground.add(_tileMap);
 		
-		_player = new Player(380, 350);
+		_player = new Player(440, 300);
 		_player.scrollFactor = SCROLLFACTOR_MIDGROUND;
-		FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER); 
+		FlxG.camera.follow(_player, FlxCamera.STYLE_LOCKON); 
 		_layer_midground.add(_player);
 		
 		_midground_emitter = new SnowflakeEmitter( -50, -100, 2000, SCROLLFACTOR_MIDGROUND);
@@ -74,7 +75,7 @@ class PlayState extends FlxState
 		super.update();
 		
 		//FlxG.collide(_layer_midground, _layer_midground);
-		FlxG.overlap(_player, _tileMap, playerTileCollision);
+		FlxG.collide(_player, _tileMap, playerTileCollision);
 		
 		if (FlxG.keys.justPressed("D"))
 		{
@@ -88,6 +89,7 @@ class PlayState extends FlxState
 	}
 	
 	public function playerTileCollision(player:Player, tile:FlxTilemap):Void {
+		
 		player.tileCollision();
 	}
 
